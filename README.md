@@ -1,6 +1,6 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The main page of the project can be seen on https://nitsbat.github.io/star-game/
 
 ## Available Scripts
 
