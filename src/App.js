@@ -13,7 +13,7 @@ const StarsDisplay = props => (
 const PlayNumber = props => (
   <button className="number"
     style={{ backgroundColor: colors[props.status] }}
-    onClick={() => console.log('Num', props.number)}>
+    onClick={() => props.onClick(props.number, props.status)}>
     {props.number}
   </button>
 );
@@ -24,8 +24,8 @@ const StarMatch = () => {
   //availableNums = Numbers which are not yet cicked and are available
   // usedNums = it is just the opposite of the availableNums
   // wrongNumber = if selected number + already available candidate numbers is greater than number of stars.
-  const [availableNums, setAvailableNums] = useState([1, 2, 3, 4, 5]);
-  const [candidateNums, setCandidateNums] = useState([2,3]);
+  const [availableNums, setAvailableNums] = useState(utils.range(1, 9));
+  const [candidateNums, setCandidateNums] = useState([]);
 
   const candidatesAreWrong = utils.sum(candidateNums) > stars;
 
@@ -38,6 +38,24 @@ const StarMatch = () => {
     }
 
     return "available";
+  }
+
+  const onNumberClick = (number, status) => {
+    // console.log(status);
+    if (status == "used")
+      return;
+    const newCandidateNum = status === 'available' ? 
+    candidateNums.concat(number) : candidateNums.filter(num => num !== number);
+    if (utils.sum(newCandidateNum) !== stars) {
+      setCandidateNums(newCandidateNum);
+    } else {
+      const newAvailableNums = availableNums.filter(
+        num => !newCandidateNum.includes(num)
+      );
+      setStars(utils.randomSumIn(newAvailableNums,9));
+      setAvailableNums(newAvailableNums);
+      setCandidateNums([]);
+    }
   }
 
   return (
@@ -54,6 +72,7 @@ const StarMatch = () => {
             <PlayNumber key={number}
               number={number}
               status={numberStatus(number)}
+              onClick={onNumberClick}
             />
           )}
         </div>
